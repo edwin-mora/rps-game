@@ -87,13 +87,19 @@
       score.loss = 0;
       score.tie = 0;
       //removing the localstorage so score resets for user
-      localStorage.removeItem('score')
+      localStorage.removeItem('score');
+      updateScoreElement();
       alert('Score reset!')
 
       "
       >
         Reset Score
       </button>
+    </div>
+    <div>
+      <p class="js-result"></p>
+      <p class="js-moves"></p>
+      <p class="js-score"></p>
     </div>
 
     <script>
@@ -107,6 +113,18 @@
           tie: 0,
         };
       }
+
+      // function for results to display on page
+      function updateScoreElement() {
+        document.querySelector(
+          ".js-score"
+        ).innerHTML = `Your score: ${score.win}
+          Computer score: ${score.loss}
+          Ties: ${score.tie}`;
+      }
+      updateScoreElement();
+
+      // function
 
       //computer move function
       function pickComputerMove() {
@@ -123,7 +141,7 @@
 
         return computerMove;
       }
-      //player moves and results
+      //player moves
       let result = "";
       function playGame(playerMove) {
         if (playerMove === "Scissors") {
@@ -152,6 +170,7 @@
           }
         }
 
+        // results and scores
         if (result === "You win") {
           score.win += 1;
         } else if (result === "You lose") {
@@ -163,12 +182,18 @@
         // json stringify so score stays after refresh
         localStorage.setItem("score", JSON.stringify(score));
 
-        alert(
-          `You picked ${playerMove}. Computer picked ${computerMove}. ${result}!
-          Your score: ${score.win}
-          Computer score: ${score.loss}
-          Ties: ${score.tie}`
-        );
+        //score update on page stays the same after refresh
+        updateScoreElement();
+
+        document.querySelector(
+          ".js-moves"
+        ).innerHTML = `You: ${playerMove} vs. CPU: ${computerMove}`;
+
+        function updateResultElement() {
+          document.querySelector(".js-result").innerHTML = result;
+        }
+
+        updateResultElement();
       }
     </script>
   </body>
